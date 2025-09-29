@@ -39,9 +39,8 @@ zcash_client_backend = { git = "https://github.com/zcash/librustzcash", rev = "d
     "transparent-inputs",
     "tor",
 ] }
-# zcash_primitives = { git = "https://github.com/zcash/librustzcash", rev = "d387aed7e04e881dbe30c6ff8b26a96c834c094b" }
 zcash_primitives = "0.24"
-zcash_protocol = { git = "https://github.com/zcash/librustzcash", rev = "d387aed7e04e881dbe30c6ff8b26a96c834c094b", features = [
+zcash_protocol = { version = "0.6", features = [
   "local-consensus",
 ] }
 
