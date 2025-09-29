@@ -12,25 +12,15 @@ hyper-rustls.workspace = true
 hyper-util.workspace = true
 hyper.workspace = true
 prost.workspace = true
+thiserror.workspace = true
+time.workspace = true
+time-core.workspace = true
 tokio-rustls.workspace = true
 tonic.workspace = true
 tower.workspace = true
-webpki-roots = "0.25"
+webpki-roots.workspace = true
 
-
-thiserror.workspace = true
-
-time = "=0.3.37"
-time-core = "=0.1.2"
-zcash_client_backend = { version = "0.19", features = [
-    "lightwalletd-tonic",
-    "orchard",
-    "transparent-inputs",
-    "tor",
-] }
-
-[features]
-test-features = []
+zcash_client_backend.workspace = true
 
 [dev-dependencies]
 rustls-pemfile.workspace = true
