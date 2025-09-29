@@ -44,6 +44,6 @@ zcash_protocol = { git = "https://github.com/zcash/librustzcash", rev = "d387aed
   "local-consensus",
 ] }
 
-zebra-chain = "2.0"
-zebra-node-services = "1.0"
-zebra-rpc = "2.0"
+zebra-chain = { git = "https://github.com/zingolabs/zebra.git" , rev = "1168a2f391a17f3ccab65a095d9219b7455d0fea" }
+zebra-node-services = { git = "https://github.com/zingolabs/zebra.git" , rev = "1168a2f391a17f3ccab65a095d9219b7455d0fea" }
+zebra-rpc = { git = "https://github.com/zingolabs/zebra.git" , rev = "1168a2f391a17f3ccab65a095d9219b7455d0fea" }
