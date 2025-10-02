@@ -134,7 +134,6 @@ pub(crate) fn zebrad(
 
     let nu5_activation_height = test_activation_heights.nu5.expect("nu5 activated");
     let nu6_activation_height = test_activation_heights.nu6.expect("nu6 activated");
-    let nu6_1_activation_height = test_activation_heights.nu6_1.expect("nu6.1 activated");
 
     let chain_cache = cache_dir.to_str().unwrap();
 
@@ -215,8 +214,17 @@ miner_address = \"{miner_address}\"
 # pre-nu5 activation heights of greater than 1 are not currently supported for regtest mode
 Canopy = 1
 NU5 = {nu5_activation_height}
-NU6 = {nu6_activation_height}
-\"NU6.1\" = {nu6_1_activation_height}"
+NU6 = {nu6_activation_height}"
+            )
+            .as_bytes(),
+        )?;
+    }
+
+    if let Some(nu6_1_activation_height) = test_activation_heights.nu6_1 {
+        config_file.write_all(
+            format!(
+                "\
+NU6.1 = {nu6_1_activation_height}"
             )
             .as_bytes(),
         )?;
