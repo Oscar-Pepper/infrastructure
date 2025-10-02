@@ -58,9 +58,10 @@ pub(crate) fn zcashd(
     let canopy_activation_height = canopy.expect("canopy activation height must be specified");
     let nu5_activation_height = nu5.expect("nu5 activation height must be specified");
     let nu6_activation_height = nu6.expect("nu6 activation height must be specified");
-    let nu6_1_activation_height = nu6_1.expect("nu6_1 activation height must be specified");
 
-    config_file.write_all(format!("\
+    config_file.write_all(
+        format!(
+            "\
 ### Blockchain Configuration
 regtest=1
 nuparams=5ba81b19:{overwinter_activation_height} # Overwinter
@@ -69,9 +70,22 @@ nuparams=2bb40e60:{blossom_activation_height} # Blossom
 nuparams=f5b9230b:{heartwood_activation_height} # Heartwood
 nuparams=e9ff75a6:{canopy_activation_height} # Canopy
 nuparams=c2d6d0b4:{nu5_activation_height} # NU5 (Orchard)
-nuparams=c8e71055:{nu6_activation_height} # NU6
-nuparams=4dec4df0:{nu6_1_activation_height} # NU6_1 https://zips.z.cash/zip-0255#nu6.1deployment
+nuparams=c8e71055:{nu6_activation_height} # NU6"
+        )
+        .as_bytes(),
+    )?;
 
+    if let Some(nu6_1_activation_height) = nu6_1 {
+        config_file.write_all(
+            format!(
+                "\n
+nuparams=4dec4df0:{nu6_1_activation_height} # NU6_1 https://zips.z.cash/zip-0255#nu6.1deployment"
+            )
+            .as_bytes(),
+        )?;
+    }
+
+    config_file.write_all(format!("\n\n
 ### MetaData Storage and Retrieval
 # txindex:
 # https://zcash.readthedocs.io/en/latest/rtd_pages/zcash_conf_guide.html#miscellaneous-options
@@ -127,16 +141,7 @@ pub(crate) fn zebrad(
 ) -> std::io::Result<PathBuf> {
     let config_file_path = config_dir.join(ZEBRAD_FILENAME);
     let mut config_file = File::create(config_file_path.clone())?;
-
-    if test_activation_heights.canopy.is_none() {
-        panic!("canopy must be active for zebrad regtest mode. please set activation height to 1");
-    }
-
-    let nu5_activation_height = test_activation_heights.nu5.expect("nu5 activated");
-    let nu6_activation_height = test_activation_heights.nu6.expect("nu6 activated");
-
     let chain_cache = cache_dir.to_str().unwrap();
-
     let network_string = network_kind_to_string(network);
 
     config_file.write_all(
@@ -202,6 +207,15 @@ use_journald = false"
     )?;
 
     if matches!(network, NetworkKind::Regtest) {
+        if test_activation_heights.canopy.is_none() {
+            panic!(
+                "canopy must be active for zebrad regtest mode. please set activation height to 1"
+            );
+        }
+
+        let nu5_activation_height = test_activation_heights.nu5.expect("nu5 activated");
+        let nu6_activation_height = test_activation_heights.nu6.expect("nu6 activated");
+
         config_file.write_all(
             format!(
                 "\n\n\
@@ -218,16 +232,16 @@ NU6 = {nu6_activation_height}"
             )
             .as_bytes(),
         )?;
-    }
 
-    if let Some(nu6_1_activation_height) = test_activation_heights.nu6_1 {
-        config_file.write_all(
-            format!(
-                "\
+        if let Some(nu6_1_activation_height) = test_activation_heights.nu6_1 {
+            config_file.write_all(
+                format!(
+                    "\n
 NU6.1 = {nu6_1_activation_height}"
-            )
-            .as_bytes(),
-        )?;
+                )
+                .as_bytes(),
+            )?;
+        }
     }
 
     Ok(config_file_path)
