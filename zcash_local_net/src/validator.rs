@@ -533,7 +533,7 @@ impl Validator for Zebrad {
         let network_listen_port = network::pick_unused_port(config.network_listen_port);
         let rpc_listen_port = network::pick_unused_port(config.rpc_listen_port);
         let indexer_listen_port = network::pick_unused_port(config.indexer_listen_port);
-        let config_dir = tempfile::tempdir().unwrap();
+        let config_dir = tempfile::tempdir_in(".").unwrap();
         let config_file_path = config::zebrad(
             config_dir.path().to_path_buf(),
             working_cache_dir,
